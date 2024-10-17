@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternating Sounds Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #container {
+            text-align: center;
+            max-width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #status {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        #timeElapsed {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="status">Press Start to begin the timer</div>
+        <div id="timeElapsed">Time Elapsed: 0 minutes, 0 seconds</div>
+        <button onclick="startTimer()">Start</button>
+        <button onclick="stopTimer()">Stop</button>
+    </div>
+
+    <audio id="soundA" src="soundA.mp3"></audio>
+    <audio id="soundB" src="soundB.mp3"></audio>
+
+    <script>
+        let currentMinute = 0;
+        let secondsElapsed = 0;
+        let timerInterval;
+        let timeInterval;
+
+        function startTimer() {
+            const status = document.getElementById('status');
+            const soundA = document.getElementById('soundA');
+            const soundB = document.getElementById('soundB');
+            const timeElapsedDisplay = document.getElementById('timeElapsed');
+
+            // Reset variables if restarting
+            currentMinute = 0;
+            secondsElapsed = 0;
+
+            // Interval for alternating sounds every minute
+            timerInterval = setInterval(() => {
+                currentMinute++;
+
+                if (currentMinute % 2 === 0) {
+                    soundA.play();
+                    status.textContent = `Minute ${currentMinute}: Playing Sound A`;
+                } else {
+                    soundB.play();
+                    status.textContent = `Minute ${currentMinute}: Playing Sound B`;
+                }
+
+            }, 60000); // 60000 ms = 1 minute
+
+            // Start tracking elapsed time immediately, but only play sounds after 1 minute
+            timeInterval = setInterval(() => {
+                secondsElapsed++;
+                const minutes = Math.floor(secondsElapsed / 60);
+                const seconds = secondsElapsed % 60;
+                timeElapsedDisplay.textContent = `Time Elapsed: ${minutes} minutes, ${seconds} seconds`;
+                
+                if (secondsElapsed === 60) {
+                    status.textContent = 'Minute 1: Starting sound sequence';
+                    currentMinute = 1; // Set currentMinute to 1 after the first 60 seconds
+                }
+            }, 1000); // 1000 ms = 1 second
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            clearInterval(timeInterval);
+            document.getElementById('status').textContent = 'Timer stopped';
+        }
+    </script>
+</body>
+</html>
