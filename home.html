@@ -59,6 +59,14 @@
             const soundB = document.getElementById('soundB');
             const timeElapsedDisplay = document.getElementById('timeElapsed');
 
+        // Unlock audio playback for Safari
+            soundA.play().then(() => {
+                soundA.pause(); // Immediately pause so it doesn’t play yet
+                soundB.play().then(() => {
+                    soundB.pause();
+                });
+            });
+
             // Reset variables if restarting
             currentMinute = 0;
             secondsElapsed = 0;
