@@ -63,6 +63,10 @@
             currentMinute = 0;
             secondsElapsed = 0;
 
+            // Ensure intervals are cleared if restarting
+            clearInterval(timerInterval);
+            clearInterval(timeInterval);
+
             // Interval for alternating sounds every minute
             timerInterval = setInterval(() => {
                 currentMinute++;
